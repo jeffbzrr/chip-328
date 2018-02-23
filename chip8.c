@@ -1,4 +1,5 @@
 //#include <windows.h>  // for MS Windows
+//gcc chip8.c -o chip8 -lglut -lGL -lGLU
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/glut.h>  // GLUT, include glu.h and gl.h
@@ -25,15 +26,15 @@ void chip8Begin(){
   SP = 0X0000;
 
   int i;
-  uint8_t temp[280];
+  uint8_t temp[4096];
   FILE *rom;
-  rom = fopen("BRIX", "r");
+  rom = fopen("ASTRO", "r");
   int ab;
-  for(ab=0;ab<280;ab++){
-    fread(&temp,280,1,rom);
+  for(ab=0;ab<1113;ab++){
+    fread(&temp,1113,1,rom);
   }
   fclose(rom);
-  for(i=0;i<280;i++){
+  for(i=0;i<1113;i++){
     chip8Memory[i+512]=temp[i];
   }
   //0
@@ -153,11 +154,11 @@ void chip8Debug(){
   for(int i = 4080;i<4096;i++){
     printf("%x ",chip8Memory[i]);
   }
-  printf("\n\n");
+  /*printf("\n\n");
   for(int i = 1812;i<2000;i++){
     printf("%d:0x%x ",i,chip8Memory[i]);
-  }
-  printf("\n");
+  }*/
+  printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
   cycleCount++;
   //if(cycleCount>885) getchar();
 }
@@ -476,6 +477,31 @@ void chip8Emulate(){
     PC+=2;
     return;
   }
+  //PARCIALMENTE IMPLEMENTADO
+  //Ex9E - SKP Vx
+  //Skip next instruction if key with the value of Vx is pressed.
+  if(chip8Memory[PC]>>4==0xE && chip8Memory[PC+1]==0x9E){
+    uint8_t x = chip8Memory[PC]&0x0F;
+    if(1){
+      PC+=4;
+    }else{
+      PC+=2;
+    }
+    return;
+  }
+  //Fx55 - LD [I], Vx
+  //Store registers V0 through Vx in memory starting at location I.
+  if(chip8Memory[PC]>>4==0xF && chip8Memory[PC+1]==0x55){
+    uint8_t i;
+    uint8_t x = chip8Memory[PC]&0x0F;
+    for(i=0;i<=x;i++){
+      chip8Memory[I+i]=V[i];
+    }
+    PC+=2;
+    return;
+  }
+
+
 }
 
 void chip8WriteDisplay(){
@@ -519,7 +545,7 @@ int main(int argc, char** argv) {
   chip8Begin();
    glutInit(&argc, argv);                 // Initialize GLUT
    glutInitWindowSize(960, 480);   // Set the window's initial width & height
-   glutCreateWindow("Chip8"); // Create a window with the given title
+   glutCreateWindow("Chip-328 Core Emulator"); // Create a window with the given title
    glutInitWindowPosition(0, 0); // Position the window's initial top-left corner
    glutDisplayFunc(display); // Register display callback handler for window re-paint
    glutTimerFunc(0, chip8, 0);
