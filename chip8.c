@@ -286,10 +286,14 @@ void chip8Emulate(){
   //Contém erros
   //Fx33 - LD B, Vx
   //Store BCD representation of Vx in memory locations I, I+1, and I+2.
+  //Por exemplo o número 128 segue a seguinte ordem, 1->[I], 2->[I+1], 8->[I+2]
   if(chip8Memory[PC]>>4==0xF && chip8Memory[PC+1]==0x33){
-    chip8Memory[I]=V[chip8Memory[PC]&0x0F]/100;
-    chip8Memory[I+1]=V[chip8Memory[PC]&0x0F]/10;
-    chip8Memory[I+2]=V[chip8Memory[PC]&0x0F];
+    uint8_t n = V[chip8Memory[PC]&0x0F];
+    chip8Memory[I+2]=n%10;
+    n=n/10;
+    chip8Memory[I+1]=n%10;
+    n=n/10;
+    chip8Memory[I]=n&0x0F%10;
     PC+=2;
     return;
   }
@@ -515,7 +519,7 @@ int main(int argc, char** argv) {
   chip8Begin();
    glutInit(&argc, argv);                 // Initialize GLUT
    glutInitWindowSize(960, 480);   // Set the window's initial width & height
-   glutCreateWindow("Chip8 Alive Emulator"); // Create a window with the given title
+   glutCreateWindow("Chip8"); // Create a window with the given title
    glutInitWindowPosition(0, 0); // Position the window's initial top-left corner
    glutDisplayFunc(display); // Register display callback handler for window re-paint
    glutTimerFunc(0, chip8, 0);
