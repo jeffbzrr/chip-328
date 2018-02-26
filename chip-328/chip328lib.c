@@ -3,7 +3,7 @@
 uint8_t V[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint16_t PC, SP_, I;
 uint8_t DT, ST;
-uint8_t chip328Memory[724];
+uint8_t chip328Memory[1024];
 uint8_t chip328Display[8][32];
 
 void chip328Begin(){

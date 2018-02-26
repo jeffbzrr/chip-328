@@ -3,6 +3,9 @@
 */
 
 //#include <windows.h>  // for MS Windows
+
+#if 0
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/glut.h>
@@ -19,27 +22,27 @@ void interfaceDelayTimer(int value){
 
 void interfaceLoadROM(){
   int i;
-  uint8_t temp[4096];
+  uint8_t temp[280];
   FILE *rom;
-  rom = fopen("ASTRO", "r");
+  rom = fopen("BRIX", "r");
   int ab;
-  for(ab=0;ab<1113;ab++){
-    fread(&temp,1113,1,rom);
+  for(ab=0;ab<280;ab++){
+    fread(&temp,280,1,rom);
   }
   fclose(rom);
-  for(i=0;i<1113;i++){
+  for(i=0;i<280;i++){
     chip328Memory[i+512]=temp[i];
   }
 }
 
 void interfaceDebug(){
   printf("Ciclo: %d\n\n",cycleCount);
-  printf("PC: %x PC_Value: %x %x SP: %x I: %x\n\n",PC,chip328Memory[PC],chip328Memory[PC+1],SP,I);
+  printf("PC: %x PC_Value: %x %x SP_: %x I: %x\n\n",PC,chip328Memory[PC],chip328Memory[PC+1],SP_,I);
   printf("V0:%x V1:%x V2:%x V3:%x V4:%x V5:%x V6:%x V7:%x\n\n",V[0],V[1],V[2],V[3],V[4],V[5],V[6],V[7]);
   printf("V8:%x V9:%x VA:%x VB:%x VC:%x VD:%x VE:%x VF:%x\n\n",V[8],V[9],V[10],V[11],V[12],V[13],V[14],V[15]);
-  for(int i = 4080;i<4096;i++){
-    printf("%x ",chip328Memory[i]);
-  }
+  //for(int i = 4080;i<4096;i++){
+  //  printf("%x ",chip328Memory[i]);
+  //}
   /*printf("\n\n");
   for(int i = 1812;i<2000;i++){
     printf("%d:0x%x ",i,chip328Memory[i]);
@@ -103,3 +106,5 @@ int main(int argc, char** argv) {
   glutMainLoop(); // Enter the event-processing loop
   return 0;
 }
+
+#endif
