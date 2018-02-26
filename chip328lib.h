@@ -1,7 +1,9 @@
 #ifndef CHIP328LIB_H   // guardas de cabeçalho, impedem inclusões cíclicas
 #define CHIP328LIB_H
 
-#include <GL/glut.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 extern uint8_t V[16];
 extern uint16_t PC, SP, I;
