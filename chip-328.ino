@@ -95,6 +95,7 @@ void setup(void) {
 
 void loop(void) {
   chip328Emulate();
+  DT=0;
   u8g.firstPage();  
   do {
     interfaceDiSP_layWrite();

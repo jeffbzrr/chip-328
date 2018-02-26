@@ -3,7 +3,7 @@
 uint8_t V[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint16_t PC, SP_, I;
 uint8_t DT, ST;
-uint8_t chip328Memory[724];
+uint8_t chip328Memory[800];
 uint8_t chip328Display[8][32];
 
 void chip328Begin(){
@@ -171,7 +171,8 @@ void chip328Emulate(){
   //00EE - RET
   if(chip328Memory[PC] == 0x00 && chip328Memory[PC+1] == 0xEE){
     PC = ((chip328Memory[SP_]<<8) + chip328Memory[SP_+1])&0x0FFF;
-    if(SP_==0x03FE){
+    //if(SP_==0x03FE){
+    if(SP_==798) {
       SP_=0x0000;
     }else{
       SP_=SP_+2;
@@ -182,7 +183,8 @@ void chip328Emulate(){
   //2nnn - CALL addr
   if(chip328Memory[PC]>>4 == 0x2){
     if(SP_==0x0000){
-      SP_=0x03F3;
+      //SP_=0x03F3;
+      SP_=798;
     }else{
       SP_=SP_-2;
     }
