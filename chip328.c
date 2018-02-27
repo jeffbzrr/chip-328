@@ -4,7 +4,7 @@
 
 //#include <windows.h>  // for MS Windows
 
-#if 0
+#if !defined(__AVR_ATmega328P__)
 
 #include <stdio.h>
 #include <stdlib.h>
