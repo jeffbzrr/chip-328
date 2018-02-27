@@ -12,7 +12,7 @@
 #include "chip328lib.h"
 
 int cycleCount = 0;
-int refreshMillis = 10;
+int refreshMillis = 1;
 
 //Main function. Inicia e configura o openGL
 void interfaceDelayTimer(int value){

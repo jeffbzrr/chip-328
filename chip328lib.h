@@ -35,4 +35,20 @@ void chip328Emulate();
 }
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+uint8_t chip328MemoryRead(uint16_t address);
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void chip328MemoryWrite(uint16_t address, uint8_t data);
+#ifdef __cplusplus
+}
+#endif
+
 #endif

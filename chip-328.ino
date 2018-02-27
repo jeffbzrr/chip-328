@@ -6,7 +6,7 @@ SpritePool s_pool;
 SPRITE sprite;
 SPRITE sprite2;
 
-const uint8_t heartImage[8] =
+const PROGMEM uint8_t heartImage[8] =
 {
     0B00001110,
     0B00011111,
