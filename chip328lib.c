@@ -239,11 +239,11 @@ void chip328Emulate(){
   //Por exemplo o número 128 segue a seguinte ordem, 1->[I], 2->[I+1], 8->[I+2]
   if(chip328MemoryRead(PC)>>4==0xF && chip328MemoryRead(PC+1)==0x33){
     uint8_t n = V[chip328MemoryRead(PC)&0x0F];
-    chip328Memory[I+2]=n%10;
+    chip328MemoryWrite(I+2,n%10);
     n=n/10;
-    chip328Memory[I+1]=n%10;
+    chip328MemoryWrite(I+1,n%10);
     n=n/10;
-    chip328Memory[I]=n&0x0F%10;
+    chip328MemoryWrite(I, n%10);
     PC+=2;
     return;
   }
