@@ -62,53 +62,53 @@ void chip328Begin(){
   chip328MemoryWrite(38, 0x40);
   chip328MemoryWrite(39, 0x40);
   //8
-  chip328Memory[40] = 0xF0;
-  chip328Memory[41] = 0x90;
-  chip328Memory[42] = 0xF0;
-  chip328Memory[43] = 0x90;
-  chip328Memory[44] = 0xF0;
+  chip328MemoryWrite(40, 0xF0);
+  chip328MemoryWrite(41, 0x90);
+  chip328MemoryWrite(42, 0xF0);
+  chip328MemoryWrite(43, 0x90);
+  chip328MemoryWrite(44, 0xF0);
   //9
-  chip328Memory[45] = 0xF0;
-  chip328Memory[46] = 0x90;
-  chip328Memory[47] = 0xF0;
-  chip328Memory[48] = 0x10;
-  chip328Memory[49] = 0xF0;
+  chip328MemoryWrite(45, 0xF0);
+  chip328MemoryWrite(46, 0x90);
+  chip328MemoryWrite(47, 0xF0);
+  chip328MemoryWrite(48, 0x10);
+  chip328MemoryWrite(49, 0xF0);
   //A
-  chip328Memory[50] = 0xF0;
-  chip328Memory[51] = 0x90;
-  chip328Memory[52] = 0xF0;
-  chip328Memory[53] = 0x90;
-  chip328Memory[54] = 0x90;
+  chip328MemoryWrite(50, 0xF0);
+  chip328MemoryWrite(51, 0x90);
+  chip328MemoryWrite(52, 0xF0);
+  chip328MemoryWrite(53, 0x90);
+  chip328MemoryWrite(54, 0x90);
   //B
-  chip328Memory[55] = 0xE0;
-  chip328Memory[56] = 0x90;
-  chip328Memory[57] = 0xE0;
-  chip328Memory[58] = 0x90;
-  chip328Memory[59] = 0xE0;
+  chip328MemoryWrite(55, 0xE0);
+  chip328MemoryWrite(56, 0x90);
+  chip328MemoryWrite(57, 0xE0);
+  chip328MemoryWrite(58, 0x90);
+  chip328MemoryWrite(59, 0xE0);
   //C
-  chip328Memory[60] = 0xF0;
-  chip328Memory[61] = 0x80;
-  chip328Memory[62] = 0x80;
-  chip328Memory[63] = 0x80;
-  chip328Memory[64] = 0xF0;
+  chip328MemoryWrite(60, 0xF0);
+  chip328MemoryWrite(61, 0x80);
+  chip328MemoryWrite(62, 0x80);
+  chip328MemoryWrite(63, 0x80);
+  chip328MemoryWrite(64, 0xF0);
   //D
-  chip328Memory[65] = 0xE0;
-  chip328Memory[66] = 0x90;
-  chip328Memory[67] = 0x90;
-  chip328Memory[68] = 0x90;
-  chip328Memory[69] = 0xE0;
+  chip328MemoryWrite(65, 0xE0);
+  chip328MemoryWrite(66, 0x90);
+  chip328MemoryWrite(67, 0x90);
+  chip328MemoryWrite(68, 0x90);
+  chip328MemoryWrite(69, 0xE0);
   //E
-  chip328Memory[70] = 0xF0;
-  chip328Memory[71] = 0x80;
-  chip328Memory[72] = 0xF0;
-  chip328Memory[73] = 0x80;
-  chip328Memory[74] = 0xF0;
+  chip328MemoryWrite(70, 0xF0);
+  chip328MemoryWrite(71, 0x80);
+  chip328MemoryWrite(72, 0xF0);
+  chip328MemoryWrite(73, 0x80);
+  chip328MemoryWrite(74, 0xF0);
   //F
-  chip328Memory[75] = 0xF0;
-  chip328Memory[76] = 0x80;
-  chip328Memory[77] = 0xF0;
-  chip328Memory[78] = 0x80;
-  chip328Memory[79] = 0x80;
+  chip328MemoryWrite(75, 0xF0);
+  chip328MemoryWrite(76, 0x80);
+  chip328MemoryWrite(77, 0xF0);
+  chip328MemoryWrite(78, 0x80);
+  chip328MemoryWrite(79, 0x80);
 }
 
 uint8_t chip328MemoryRead(uint16_t address){
@@ -253,7 +253,7 @@ void chip328Emulate(){
     uint8_t i;
     uint8_t x = chip328MemoryRead(PC)&0x0F;
     for(i=0;i<=x;i++){
-      V[i]=chip328Memory[I+i];
+      V[i]=chip328MemoryRead(I+i);
     }
     PC+=2;
     return;
@@ -444,7 +444,7 @@ void chip328Emulate(){
     uint8_t i;
     uint8_t x = chip328MemoryRead(PC)&0x0F;
     for(i=0;i<=x;i++){
-      chip328Memory[I+i]=V[i];
+      chip328MemoryWrite(I+i, V[i]);
     }
     PC+=2;
     return;
