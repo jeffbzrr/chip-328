@@ -31,7 +31,7 @@ void interfaceLoadROM(){
   }
   fclose(rom);
   for(i=0;i<280;i++){
-    chip328Memory[i+512]=temp[i];
+    chip328Memory[i]=temp[i];
   }
 }
 
