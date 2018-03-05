@@ -1,9 +1,16 @@
 #include "chip328lib.h"
+#if defined(__AVR_ATmega328P__)
+  #include "Arduino.h"
+#endif
 
 uint8_t V[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint16_t PC, SP_, I;
 uint8_t DT, ST;
-uint8_t chip328MemSys[80] =
+#if defined(__AVR_ATmega328P__)
+  const PROGMEM uint8_t chip328MemSys[80] =
+#else
+	uint8_t chip328MemSys[80] =
+#endif
 {
    0xF0,
    0x90,
@@ -120,7 +127,6 @@ uint8_t chip328MemoryRead(uint16_t address){
 }
 
 void chip328MemoryWrite(uint16_t address, uint8_t data){
-   if(address<512) { chip328MemSys[address]=data; return; }
    if(address>=4080) { chip328MemStack[address-4080]=data; return; }
    chip328Memory[address-512]=data;
 }
