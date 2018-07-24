@@ -143,6 +143,18 @@ uint8_t chip328PutPixel(uint8_t x, uint8_t y, uint8_t pixel){
   return collision;
 }
 
+uint8_t chip328PutPixelArduino(uint8_t x, uint8_t y, uint8_t pixel){
+  uint8_t offsetByte=x/8;
+  uint8_t offsetBit=x%8;
+  uint8_t collision = 0;
+
+  if(pixel){
+    if(chip328Display[offsetByte][y]&(0b10000000>>offsetBit)) collision = 1;
+    chip328Display[offsetByte][y] = chip328Display[offsetByte][y]^(0b10000000>>offsetBit);
+  }
+  return collision;
+}
+
 void chip328Emulate(){
   //Dxyn - DRW Vx, Vy, nibble
   //Display n-byte SP_rite starting at memory location I at (Vx, Vy), set VF = collision.
