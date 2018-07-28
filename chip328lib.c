@@ -1,5 +1,5 @@
 #include "chip328lib.h"
-#if defined(__AVR_ATmega328P__)
+#if defined(N__AVR_ATmega328P__)
   #include "Arduino.h"
 #endif
 
@@ -7,7 +7,7 @@ uint8_t V[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint16_t PC, SP_, I;
 uint8_t DT, ST;
 #if defined(__AVR_ATmega328P__)
-  const PROGMEM uint8_t chip328MemSys[80] =
+  uint8_t chip328MemSys[80] =
 #else
 	uint8_t chip328MemSys[80] =
 #endif
@@ -110,7 +110,13 @@ uint8_t DT, ST;
 };
 uint8_t chip328MemStack[16];
 uint8_t chip328Memory[300];
-uint8_t chip328Display[8][32];
+
+#if defined(__AVR_ATmega328P__)
+  uint8_t chip328Display[256];
+#else
+  uint8_t chip328Display[8][32];
+#endif
+
 
 void chip328Begin(){
   PC = 0x0200;
@@ -131,29 +137,25 @@ void chip328MemoryWrite(uint16_t address, uint8_t data){
    chip328Memory[address-512]=data;
 }
 
-uint8_t chip328PutPixel(uint8_t x, uint8_t y, uint8_t pixel){
-  uint8_t offsetByte=x/8;
-  uint8_t offsetBit=x%8;
-  uint8_t collision = 0;
 
-  if(pixel){
-    if(chip328Display[offsetByte][y]&(0b10000000>>offsetBit)) collision = 1;
-    chip328Display[offsetByte][y] = chip328Display[offsetByte][y]^(0b10000000>>offsetBit);
-  }
-  return collision;
+
+#if defined(__AVR_ATmega328P__)
+
+#else
+  uint8_t chip328PutPixel(uint8_t x, uint8_t y, uint8_t pixel){
+    uint8_t offsetByte=x/8;
+    uint8_t offsetBit=x%8;
+    uint8_t collision = 0;
+
+    if(pixel){
+      if(chip328Display[offsetByte][y]&(0b10000000>>offsetBit)) collision = 1;
+      chip328Display[offsetByte][y] = chip328Display[offsetByte][y]^(0b10000000>>offsetBit);
+    }
+    return collision;
 }
+#endif
 
-uint8_t chip328PutPixelArduino(uint8_t x, uint8_t y, uint8_t pixel){
-  uint8_t offsetByte=x/8;
-  uint8_t offsetBit=x%8;
-  uint8_t collision = 0;
 
-  if(pixel){
-    if(chip328Display[offsetByte][y]&(0b10000000>>offsetBit)) collision = 1;
-    chip328Display[offsetByte][y] = chip328Display[offsetByte][y]^(0b10000000>>offsetBit);
-  }
-  return collision;
-}
 
 void chip328Emulate(){
   //Dxyn - DRW Vx, Vy, nibble
@@ -192,11 +194,17 @@ void chip328Emulate(){
   //00E0 - CLS
   if(chip328MemoryRead(PC) == 0x00 && chip328MemoryRead(PC+1) == 0xE0){
     uint8_t i,j;
-    for(i=0;i<8;i++){
-      for(j=0;j<32;j++){
-        chip328Display[i][j]=0x00;
+    #if defined(__AVR_ATmega328P__)
+      for(i=0;i<256;i++){
+        chip328Display[i]=0x00;
       }
-    }
+    #else
+      for(i=0;i<8;i++){
+        for(j=0;j<32;j++){
+          chip328Display[i][j]=0x00;
+        }
+      }
+    #endif
     PC=PC+2;
     return;
   }

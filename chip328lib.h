@@ -10,13 +10,17 @@ extern uint16_t PC, SP_, I;
 extern uint8_t DT, ST;
 
 #if defined(__AVR_ATmega328P__)
-  extern const uint8_t chip328MemSys[80];
+  extern uint8_t chip328MemSys[80];
 #else
 	extern uint8_t chip328MemSys[80];
 #endif
 extern uint8_t chip328MemStack[16];
 extern uint8_t chip328Memory[300];
-extern uint8_t chip328Display[8][32];
+#if defined(__AVR_ATmega328P__)
+  extern uint8_t chip328Display[256];
+#else
+  extern uint8_t chip328Display[8][32];
+#endif
 
 
 #ifdef __cplusplus
