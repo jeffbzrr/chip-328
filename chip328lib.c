@@ -134,7 +134,9 @@ void chip328Emulate(){
     V[15]=0x00;
     for(i=0;i<(chip328MemoryRead(PC+1)&0x0F);i++){
       for(j=0;j<8;j++){
-        if(interfacePutPixel(x+j,y+i,chip328MemoryRead(I+i)&(0b10000000>>j))){
+        uint8_t offset = x+j;
+        if(offset > 63) offset = offset-64;
+        if(interfacePutPixel(offset,y+i,chip328MemoryRead(I+i)&(0b10000000>>j))){
           V[15]=0x01;
         }
       }
