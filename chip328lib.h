@@ -34,7 +34,7 @@ void chip328Begin();
 #ifdef __cplusplus
 extern "C" {
 #endif
-uint8_t chip328PutPixel(uint8_t x, uint8_t y, uint8_t pixel);
+uint8_t interfacePutPixel(uint8_t x, uint8_t y, uint8_t pixel);
 #ifdef __cplusplus
 }
 #endif

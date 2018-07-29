@@ -5,7 +5,7 @@ unsigned long current = 0, dtMillis = 0;
 
 uint8_t chip328Display[256];
 
-uint8_t chip328PutPixel(uint8_t x, uint8_t y, uint8_t pixel){
+uint8_t interfacePutPixel(uint8_t x, uint8_t y, uint8_t pixel){
   uint8_t collision = 0;
   uint8_t pos;
 

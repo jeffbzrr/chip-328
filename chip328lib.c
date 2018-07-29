@@ -1,16 +1,12 @@
 #include "chip328lib.h"
-#if defined(N__AVR_ATmega328P__)
-  #include "Arduino.h"
-#endif
 
 uint8_t V[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint16_t PC, SP_, I;
 uint8_t DT, ST;
-#if defined(__AVR_ATmega328P__)
-  uint8_t chip328MemSys[80] =
-#else
-	uint8_t chip328MemSys[80] =
-#endif
+
+uint8_t chip328MemStack[16];
+uint8_t chip328Memory[300];
+uint8_t chip328MemSys[80] =
 {
    0xF0,
    0x90,
@@ -108,15 +104,6 @@ uint8_t DT, ST;
    0x80,
    0x80
 };
-uint8_t chip328MemStack[16];
-uint8_t chip328Memory[300];
-
-#if defined(__AVR_ATmega328P__)
-  uint8_t chip328Display[256];
-#else
-  uint8_t chip328Display[8][32];
-#endif
-
 
 void chip328Begin(){
   PC = 0x0200;
@@ -137,26 +124,6 @@ void chip328MemoryWrite(uint16_t address, uint8_t data){
    chip328Memory[address-512]=data;
 }
 
-
-
-#if defined(__AVR_ATmega328P__)
-
-#else
-  uint8_t chip328PutPixel(uint8_t x, uint8_t y, uint8_t pixel){
-    uint8_t offsetByte=x/8;
-    uint8_t offsetBit=x%8;
-    uint8_t collision = 0;
-
-    if(pixel){
-      if(chip328Display[offsetByte][y]&(0b10000000>>offsetBit)) collision = 1;
-      chip328Display[offsetByte][y] = chip328Display[offsetByte][y]^(0b10000000>>offsetBit);
-    }
-    return collision;
-}
-#endif
-
-
-
 void chip328Emulate(){
   //Dxyn - DRW Vx, Vy, nibble
   //Display n-byte SP_rite starting at memory location I at (Vx, Vy), set VF = collision.
@@ -167,7 +134,7 @@ void chip328Emulate(){
     V[15]=0x00;
     for(i=0;i<(chip328MemoryRead(PC+1)&0x0F);i++){
       for(j=0;j<8;j++){
-        if(chip328PutPixel(x+j,y+i,chip328MemoryRead(I+i)&(0b10000000>>j))){
+        if(interfacePutPixel(x+j,y+i,chip328MemoryRead(I+i)&(0b10000000>>j))){
           V[15]=0x01;
         }
       }

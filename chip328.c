@@ -14,6 +14,20 @@
 int cycleCount = 0;
 int refreshMillis = 1;
 
+uint8_t chip328Display[8][32];
+
+uint8_t interfacePutPixel(uint8_t x, uint8_t y, uint8_t pixel){
+  uint8_t offsetByte=x/8;
+  uint8_t offsetBit=x%8;
+  uint8_t collision = 0;
+
+  if(pixel){
+    if(chip328Display[offsetByte][y]&(0b10000000>>offsetBit)) collision = 1;
+    chip328Display[offsetByte][y] = chip328Display[offsetByte][y]^(0b10000000>>offsetBit);
+  }
+  return collision;
+}
+
 //Main function. Inicia e configura o openGL
 void interfaceDelayTimer(int value){
   if(DT!=0) DT--;
