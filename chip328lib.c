@@ -433,13 +433,23 @@ void chip328Emulate(){
     PC+=2;
     return;
   }
-  //PARCIALMENTE IMPLEMENTADO
   //Ex9E - SKP Vx
   //Skip next instruction if key with the value of Vx is pressed.
   if(chip328MemoryRead(PC)>>4==0xE && chip328MemoryRead(PC+1)==0x9E){
     uint8_t x = chip328MemoryRead(PC)&0x0F;
     if(1){
       PC+=4;
+    }else{
+      PC+=4;
+    }
+    return;
+  }
+  //ExA1 - SKNP Vx
+  //Skip next instruction if key with the value of Vx is not pressed.
+  if(chip328MemoryRead(PC)>>4==0xE && chip328MemoryRead(PC+1)==0xA1){
+    uint8_t x = chip328MemoryRead(PC)&0x0F;
+    if(1){
+      PC+=2;
     }else{
       PC+=2;
     }
