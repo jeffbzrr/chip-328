@@ -42,6 +42,14 @@ uint8_t interfacePutPixel(uint8_t x, uint8_t y, uint8_t pixel);
 #ifdef __cplusplus
 extern "C" {
 #endif
+uint8_t interfaceGetKey();
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 void chip328Emulate();
 #ifdef __cplusplus
 }

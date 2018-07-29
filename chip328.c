@@ -51,7 +51,7 @@ void interfaceLoadROM(){
 
 void interfaceDebug(){
   printf("Ciclo: %d\n\n",cycleCount);
-  printf("PC: %x PC_Value: %x %x SP_: %x I: %x\n\n",PC,chip328Memory[PC],chip328Memory[PC+1],SP_,I);
+  printf("PC: %x PC_Value: %x %x SP_: %x I: %x\n\n",PC,chip328MemoryRead(PC),chip328MemoryRead(PC+1),SP_,I);
   printf("V0:%x V1:%x V2:%x V3:%x V4:%x V5:%x V6:%x V7:%x\n\n",V[0],V[1],V[2],V[3],V[4],V[5],V[6],V[7]);
   printf("V8:%x V9:%x VA:%x VB:%x VC:%x VD:%x VE:%x VF:%x\n\n",V[8],V[9],V[10],V[11],V[12],V[13],V[14],V[15]);
   //for(int i = 4080;i<4096;i++){

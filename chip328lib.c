@@ -314,18 +314,6 @@ void chip328Emulate(){
     PC+=2;
     return;
   }
-  //PARCIALMENTE IMPLEMENTADA
-  //ExA1 - SKNP Vx
-  //Skip next instruction if key with the value of Vx is not pressed.
-  if(chip328MemoryRead(PC)>>4==0xE && chip328MemoryRead(PC+1)==0xA1){
-    uint8_t x = chip328MemoryRead(PC)&0x0F;
-    if(1){
-      PC+=4;
-    }else{
-      PC+=2;
-    }
-    return;
-  }
   //8xy2 - AND Vx, Vy
   //Set Vx = Vx AND Vy.
   if(chip328MemoryRead(PC)>>4==0x8 && (chip328MemoryRead(PC+1)&0x0F)==0x2){
@@ -437,10 +425,10 @@ void chip328Emulate(){
   //Skip next instruction if key with the value of Vx is pressed.
   if(chip328MemoryRead(PC)>>4==0xE && chip328MemoryRead(PC+1)==0x9E){
     uint8_t x = chip328MemoryRead(PC)&0x0F;
-    if(1){
+    if(V[x] == interfaceGetKey()){
       PC+=4;
     }else{
-      PC+=4;
+      PC+=2;
     }
     return;
   }
@@ -448,10 +436,10 @@ void chip328Emulate(){
   //Skip next instruction if key with the value of Vx is not pressed.
   if(chip328MemoryRead(PC)>>4==0xE && chip328MemoryRead(PC+1)==0xA1){
     uint8_t x = chip328MemoryRead(PC)&0x0F;
-    if(1){
+    if(V[x] == interfaceGetKey()){
       PC+=2;
     }else{
-      PC+=2;
+      PC+=4;
     }
     return;
   }

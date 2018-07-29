@@ -1,5 +1,26 @@
 #include "chip328lib.h"
 #include "ssd1306.h"
+#include <Keypad.h>
+
+const byte ROWS = 4;
+const byte COLS = 4;
+uint8_t lastKey;
+
+uint8_t keys[ROWS][COLS] = {
+  {0xC,0xD,0xE,0xF},
+  {0x3,0x6,0x9,0xB},
+  {0x2,0x5,0x8,0x0},
+  {0x1,0x4,0x7,0xA}
+};
+
+byte rowPins[ROWS] = {5, 4, 3, 2}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = {6, 7, 8, 9}; //connect to the column pinouts of the keypad
+
+Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
+
+uint8_t interfaceGetKey(){
+  return keypad.getKey();
+}
 
 unsigned long current = 0, dtMillis = 0;
 
@@ -63,7 +84,7 @@ void interfaceLoadROM(){
 
 void setup() {
     Serial.begin(9600);
-    Serial.println("Setup");
+    //Serial.println("Setup");
     interfaceLoadROM();
     chip328Begin();
     ssd1306_128x64_i2c_init();
