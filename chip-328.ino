@@ -1,25 +1,35 @@
 #include "chip328lib.h"
 #include "ssd1306.h"
-#include <Keypad.h>
 
-const byte ROWS = 4;
-const byte COLS = 4;
-uint8_t lastKey;
-
-uint8_t keys[ROWS][COLS] = {
-  {0xC,0xD,0xE,0xF},
-  {0x3,0x6,0x9,0xB},
-  {0x2,0x5,0x8,0x0},
-  {0x1,0x4,0x7,0xA}
+uint8_t keys[4][4] = {
+  {0x1,0x2,0x3,0xC},
+  {0x4,0x5,0x6,0xD},
+  {0x7,0x8,0x9,0xE},
+  {0xA,0x0,0xB,0xF}
 };
 
-byte rowPins[ROWS] = {5, 4, 3, 2}; //connect to the row pinouts of the keypad
-byte colPins[COLS] = {6, 7, 8, 9}; //connect to the column pinouts of the keypad
-
-Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
-
 uint8_t interfaceGetKey(){
-  return keypad.getKey();
+  int j;
+    for(j=0;j<4;j++){
+      digitalWrite(j+2, HIGH);
+      if(digitalRead(6) == HIGH){
+        digitalWrite(j+2, LOW);
+        return keys[0][j];
+      }
+      if(digitalRead(7) == HIGH){
+        digitalWrite(j+2, LOW);
+        return keys[1][j];
+      }
+      if(digitalRead(8) == HIGH){
+        digitalWrite(j+2, LOW);
+        return keys[2][j];
+      }
+      if(digitalRead(9) == HIGH){
+        digitalWrite(j+2, LOW);
+        return keys[3][j];
+      }
+      digitalWrite(j+2, LOW);
+    }
 }
 
 unsigned long current = 0, dtMillis = 0;
@@ -83,16 +93,29 @@ void interfaceLoadROM(){
 }
 
 void setup() {
-    Serial.begin(9600);
-    //Serial.println("Setup");
+    //Linhas do teclado
+    pinMode(2, OUTPUT);
+    pinMode(3, OUTPUT);
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+    digitalWrite(2, LOW);
+    digitalWrite(3, LOW);
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+  
+    //Colunas do teclado
+    pinMode(6, INPUT);
+    pinMode(7, INPUT);
+    pinMode(8, INPUT);
+    pinMode(9, INPUT);
+
     interfaceLoadROM();
     chip328Begin();
     ssd1306_128x64_i2c_init();
     ssd1306_fillScreen( 0x00 );
-    Serial.println("End of setup");
 }
 
 void loop() {
     chip328Emulate();
-    DT = 0;
+    DT = 0; //Implementar o DT--;
 }
