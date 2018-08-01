@@ -141,6 +141,37 @@ void chip328Emulate(){
         }
       }
     }
+    for(i=0;i<7;i++){
+      uint8_t x_ = x+i;
+      if(x_ > 63) x_ = x_-64;
+      uint8_t original = chip328Display[x_+(y/8)*64];
+      uint8_t expandedUp = 0b00000000, expandedDown = 0b00000000;
+
+      expandedUp |= (original&0b00010000)>>4;
+      expandedUp |= (original&0b00010000)>>3;
+      expandedUp |= (original&0b00100000)>>3;
+      expandedUp |= (original&0b00100000)>>2;
+      expandedUp |= (original&0b01000000)>>2;
+      expandedUp |= (original&0b01000000)>>1;
+      expandedUp |= (original&0b10000000)>>1;
+      expandedUp |= (original&0b10000000);
+
+      expandedDown |= (original&0b00000001);
+      expandedDown |= (original&0b00000001)<<1;
+      expandedDown |= (original&0b00000010)<<1;
+      expandedDown |= (original&0b00000010)<<2;
+      expandedDown |= (original&0b00000100)<<2;
+      expandedDown |= (original&0b00000100)<<3;
+      expandedDown |= (original&0b00001000)<<3;
+      expandedDown |= (original&0b00001000)<<4;
+
+      //O MSB do display é o LSB do buffer...
+      ssd1306_putPixels(x_*2, ((y/8)*8)*2, expandedDown);
+      ssd1306_putPixels(x_*2+1, ((y/8)*8)*2, expandedDown);
+
+      ssd1306_putPixels(x_*2, ((y/8)*8)*2+8, expandedUp);
+      ssd1306_putPixels(x_*2+1, ((y/8)*8)*2+8, expandedUp);
+    }
     PC=PC+2;
   }
   //JP

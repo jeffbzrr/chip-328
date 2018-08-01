@@ -45,37 +45,7 @@ uint8_t interfacePutPixel(uint8_t x, uint8_t y, uint8_t pixel){
 
     if(chip328Display[pos]&(0b00000001<<(y%8))) collision = 1;
     chip328Display[pos] = chip328Display[pos]^(0b00000001<<(y%8));
-
   }
-
-  uint8_t original = chip328Display[x+(y/8)*64];
-  uint8_t expandedUp = 0b00000000, expandedDown = 0b00000000;
-
-  expandedUp = expandedUp | (original&0b00010000)>>4;
-  expandedUp = expandedUp | (original&0b00010000)>>3;
-  expandedUp = expandedUp | (original&0b00100000)>>3;
-  expandedUp = expandedUp | (original&0b00100000)>>2;
-  expandedUp = expandedUp | (original&0b01000000)>>2;
-  expandedUp = expandedUp | (original&0b01000000)>>1;
-  expandedUp = expandedUp | (original&0b10000000)>>1;
-  expandedUp = expandedUp | (original&0b10000000);
-
-  expandedDown = expandedDown | (original&0b00000001);
-  expandedDown = expandedDown | (original&0b00000001)<<1;
-  expandedDown = expandedDown | (original&0b00000010)<<1;
-  expandedDown = expandedDown | (original&0b00000010)<<2;
-  expandedDown = expandedDown | (original&0b00000100)<<2;
-  expandedDown = expandedDown | (original&0b00000100)<<3;
-  expandedDown = expandedDown | (original&0b00001000)<<3;
-  expandedDown = expandedDown | (original&0b00001000)<<4;
-
-  //O MSB do display é o LSB do buffer...
-  ssd1306_putPixels(x*2, ((y/8)*8)*2, expandedDown);
-  ssd1306_putPixels(x*2+1, ((y/8)*8)*2, expandedDown);
-
-  ssd1306_putPixels(x*2, ((y/8)*8)*2+8, expandedUp);
-  ssd1306_putPixels(x*2+1, ((y/8)*8)*2+8, expandedUp);
-
   return collision;
 }
 
@@ -102,7 +72,7 @@ void setup() {
     digitalWrite(3, LOW);
     digitalWrite(4, LOW);
     digitalWrite(5, LOW);
-  
+
     //Colunas do teclado
     pinMode(6, INPUT);
     pinMode(7, INPUT);
